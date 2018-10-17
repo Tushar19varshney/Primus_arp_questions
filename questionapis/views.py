@@ -23,9 +23,9 @@ class Ques(APIView):
 
 		difficulty_level = data.get('diff')
 		print(difficulty_level)
-		num = randint(1, 10)
+		num = randint(1,10)
 		Question_ = Question.objects.get(difficulty=difficulty_level)
-
+		# Question_ = Questions[num]
 		response = {
 			'question':Question_.ques,
 			'option1':Question_.option1,
@@ -36,4 +36,33 @@ class Ques(APIView):
 
 		}
 
+		return JsonResponse(response, safe=False, content_type='application/json')
+
+class Durgesh(APIView):
+	def post(self, request):
+		print(request)
+		try:
+			data = request.data
+		except ParseError as error:
+			return Response(
+                'Invalid JSON - {0}'.format(error.detail),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+		# difficulty_level = data.get('diff')
+		# print(difficulty_level)
+		# num = randint(1,10)
+		# Question_ = Question.objects.get(difficulty=difficulty_level)
+		# Question_ = Questions[num]
+		q = Question(
+			ques=data.get('ques'),
+			option1=data.get('opt1'),
+			option2=data.get('opt2'),
+			option3=data.get('opt3'),
+			option4=data.get('opt4'),
+			difficulty=data.get('diff'),
+
+		)
+		q.save()
+		response = {'message':'question saved successfully'}
 		return JsonResponse(response, safe=False, content_type='application/json')
